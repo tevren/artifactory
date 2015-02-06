@@ -17,6 +17,8 @@ ark 'artifactory' do
   group node['artifactory']['user']
 end
 
+include_recipe "artifactory::_database"
+
 runit_service 'artifactory' do
   default_logger true
   env({
