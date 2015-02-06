@@ -4,7 +4,8 @@ default['java']['install_flavor'] = 'openjdk'
 default['java']['openjdk_packages'] = ['openjdk-7-jre-headless', 'openjdk-7-jdk']
 default['java']['jdk_version'] = '7'
 
-default['artifactory']['version'] = '3.1.0'
+default['artifactory']['version'] = '3.5.1'
+default['artifactory']['checksum'] = 'b6ae87d5ce044975af9965ac833c91e9c64b9ece3ececb59007a3c33749367e4'
 default['artifactory']['user'] = 'artifactory'
 default['artifactory']['dir'] = '/opt/artifactory'
 default['artifactory']['java_opts'] = '-server -Xms512m -Xmx2g -Xss256k -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC'

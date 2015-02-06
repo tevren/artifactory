@@ -11,6 +11,7 @@ package 'unzip'
 ark 'artifactory' do
   action :put
   url node['artifactory']['url']
+  checksum node['artifactory']['checksum']
   path File.dirname(node['artifactory']['dir'])
   owner node['artifactory']['user']
   group node['artifactory']['user']
