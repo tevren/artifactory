@@ -19,6 +19,7 @@ folders_to_replace = ['tomcat', 'bin']
 files_to_replace.each do |item|
   file "#{node['artifactory']['dir']}/#{item}" do
     action :delete
+    notifies :put, 'ark[artifactory]', :delayed
   end
 end
 
@@ -26,6 +27,7 @@ folders_to_replace.each do |item|
   directory "#{node['artifactory']['dir']}/#{item}" do
     recursive true
     action :delete
+    notifies :put, 'ark[artifactory]', :delayed
   end
 end
 
