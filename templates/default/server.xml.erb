@@ -1,0 +1,12 @@
+<Server port="8015" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Connector port="<%= node[:artifactory][:catalina][:port] %>" protocol="<%= node[:artifactory][:catalina][:protocol] %>"
+         maxThreads="<%= node[:artifactory][:catalina][:max_threads] %>" minSpareThreads="<%= node[:artifactory][:catalina][:min_spare_threads] %>" maxSpareThreads="<%= node[:artifactory][:catalina][:max_spare_threads] %>"
+         enableLookups="<%= node[:artifactory][:catalina][:enable_lookups] %>" disableUploadTimeout="<%= node[:artifactory][:catalina][:disable_upload_timeout] %>"
+         backlog="<%= node[:artifactory][:catalina][:backlog] %>" />
+
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps"/>
+        </Engine>
+    </Service>
+</Server>
