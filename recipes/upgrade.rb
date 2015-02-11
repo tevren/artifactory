@@ -5,7 +5,7 @@
 # We follow the guide from JFrog for upgrade process:
 # http://www.jfrog.com/confluence/display/RTF/Upgrading+Artifactory
 files_to_replace = ['webapps/artifactory.war']
-folders_to_replace = ['tomcat', 'bin']
+folders_to_replace = ['tomcat', 'bin', 'misc']
 
 files_to_replace.each do |item|
   file "#{node['artifactory']['dir']}/#{item}" do
