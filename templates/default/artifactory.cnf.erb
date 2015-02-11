@@ -1,0 +1,37 @@
+# RECOMMENDED SETTINGS FROM
+# http://www.jfrog.com/confluence/pages/viewpage.action?pageId=27885726
+#
+# The maximum size of the binary payload the server can handle
+<% if node[:mysql][:config][:max_allowed_packet] %>
+max_allowed_packet=<%= node[:mysql][:config][:max_allowed_packet] %>
+<% end %>
+
+# By default innodb engine use one file for all databases and tables. We
+# recommend changing this to one file per table.
+# NOTE: This will take effect only if Artifactory tables are not created yet!
+# Need to be set and MySQL restarted before starting Artifactory for the first
+# time.
+#innodb_file_per_table
+
+# Theses are tuning parameters that can be set to control and increase the
+# memory buffer sizes.
+<% if node[:mysql][:config][:innodb_buffer_pool_size] %>
+innodb_buffer_pool_size=<%= node[:mysql][:config][:innodb_buffer_pool_size] %>
+<% end %>
+<% if node[:mysql][:config][:tmp_table_size] %>
+tmp_table_size=<%= node[:mysql][:config][:tmp_table_size] %>
+<% end %>
+<% if node[:mysql][:config][:max_heap_table_size] %>
+max_heap_table_size=<%= node[:mysql][:config][:max_heap_table_size] %>
+<% end %>
+
+# Theses control the innodb log files size and can be changed only when MySQL
+# is down and MySQL will not start if there are some innodb log files left in
+# the datadir.  So, changing theses means removing the old innodb log files
+# before start.
+<% if node[:mysql][:config][:innodb_log_file_size] %>
+innodb_log_file_size=<%= node[:mysql][:config][:innodb_log_file_size] %>
+<% end %>
+<% if node[:mysql][:config][:innodb_log_buffer_size] %>
+innodb_log_buffer_size=<%= node[:mysql][:config][:innodb_log_buffer_size] %>
+<% end %>
