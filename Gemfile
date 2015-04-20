@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
+gem "berkshelf", "=2.0.18"
 gem 'chef-rewind'
 gem 'chef-sugar'
 
@@ -10,6 +10,7 @@ group :test do
   gem 'chefspec'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'rake'
 end
 
 group :integration do
