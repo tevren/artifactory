@@ -14,8 +14,8 @@ group :test do
 end
 
 group :integration do
-  gem 'test-kitchen', '~> 1.1.1'
+  gem 'test-kitchen'
   gem 'kitchen-vagrant'
+  gem 'busser-serverspec'
   gem 'serverspec'
-  gem 'busser'
 end
