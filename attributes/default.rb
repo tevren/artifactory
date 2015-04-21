@@ -4,6 +4,12 @@ default['java']['install_flavor'] = 'openjdk'
 default['java']['openjdk_packages'] = ['openjdk-7-jre-headless', 'openjdk-7-jdk']
 default['java']['jdk_version'] = '7'
 
+default['mysql']['databag'] = 'mysql'
+default['mysql']['databag_item'] = 'credentials'
+default['mysql']['version'] = '5.5'
+default['mysql']['bind_address'] = '0.0.0.0'
+default['mysql']['port'] = '3306'
+
 default['artifactory']['version'] = '3.5.1'
 default['artifactory']['checksum'] = 'b6ae87d5ce044975af9965ac833c91e9c64b9ece3ececb59007a3c33749367e4'
 default['artifactory']['user'] = 'artifactory'
@@ -23,3 +29,6 @@ default['artifactory']['catalina']['enable_lookups']          = false
 default['artifactory']['catalina']['disable_upload_timeout']  = true
 default['artifactory']['catalina']['backlog']                 = 100
 
+default['artifactory']['database']['name']                    = 'artifactory'
+default['artifactory']['databag']                             = 'artifactory'
+default['artifactory']['databag_item']                        = 'credentials'

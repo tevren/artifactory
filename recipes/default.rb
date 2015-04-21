@@ -26,7 +26,7 @@ include_recipe "artifactory::_tomcat"
 execute "change-executable-permission" do
   command "find #{node['artifactory']['dir']} -type f -name '*.sh' -exec chmod +x {} \\;"
   user "root"
-  notifies :restart, 'service[artifactory]'
+  notifies :restart, 'service[artifactory]', :delayed
 end
 
 runit_service 'artifactory' do
@@ -39,4 +39,5 @@ runit_service 'artifactory' do
                            ].join(" "),
         "ARTIFACTORY_HOME" => node['artifactory']['dir']
       })
+  subscribes :restart, "template [#{node['artifactory']['dir']}/etc/storage.properties]", :immediately
 end

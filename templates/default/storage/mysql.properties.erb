@@ -1,8 +1,8 @@
 type=mysql
 driver=com.mysql.jdbc.Driver
 url=<%= "jdbc:mysql://#{node['mysql']['bind_address']}:#{node['mysql']['port']}/#{node['artifactory']['database']['name']}?characterEncoding=UTF-8&elideSetAutoCommits=true" %>
-username=<%= node['artifactory']['database']['username'] %>
-password=<%= node['artifactory']['database']['password'] %>
+username=<%= @artifactory_creds['mysql']['username'] %>
+password=<%= @artifactory_creds['mysql']['password'] %>
 
 ## Determines where the actual artifacts binaries are stored. Available options:
 ## filesystem - binaries are stored in the filesystem (recommended, default)

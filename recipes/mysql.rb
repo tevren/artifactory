@@ -18,32 +18,37 @@ end
 # Install MySQL client
 mysql_client 'default' do
   action :create
-  notifies :install, 'chef_gem[mysql2]', :immediately
+  notifies :install, 'mysql2_chef_gem[default]', :immediately
 end
 
 # NOTE: database cookbook required to use 'mysql2' gem to be installed
-chef_gem "mysql2" do
+mysql2_chef_gem 'default' do
   action :install
 end
 
 # Install the MySQL server on the same box
-template '/etc/mysql/conf.d/artifactory.cnf' do
-  owner node['artifactory']['user']
-  group node['artifactory']['user']
-  source 'artifactory.cnf.erb'
-  notifies :restart, 'mysql_service[default]'
+mysql_creds = Chef::EncryptedDataBagItem.load(node['mysql']['databag'], node['mysql']['databag_item'])
+mysql_service 'artifactory' do
+  version '5.5'
+  bind_address '0.0.0.0'
+  port '3306'
+  data_dir '/data'
+  initial_root_password mysql_creds['server_root_password']
+  action [:create, :start]
 end
 
-mysql_service 'default' do
-  version '5.5'
+mysql_config 'artifactory' do
+  instance 'artifactory'
+  source 'artifactory.cnf.erb'
   action :create
+  notifies :restart, 'mysql_service[artifactory]'
 end
 
 # Setting up artifactory db
 mysql_connection_info = {
   :host =>  node['mysql']['bind_address'],
   :username => "root",
-  :password => node['mysql']['server_root_password']
+  :password => mysql_creds['server_root_password']
 }
 
 mysql_database node['artifactory']['database']['name'] do
@@ -58,10 +63,12 @@ mysql_database "changing the charset of database" do
   sql "ALTER DATABASE #{node['artifactory']['database']['name']} charset=utf8"
 end
 
-mysql_database_user node['artifactory']['database']['username'] do
+artifactory_creds = Chef::EncryptedDataBagItem.load(node['artifactory']['databag'], node['artifactory']['databag_item'])
+
+mysql_database_user artifactory_creds['mysql']['username'] do
   connection mysql_connection_info
   database_name node['artifactory']['database']['name']
-  password node['artifactory']['database']['password']
+  password artifactory_creds['mysql']['password']
   privileges [
     :all
   ]
@@ -79,6 +86,6 @@ end
 template "#{node['artifactory']['dir']}/etc/storage.properties" do
   owner node['artifactory']['user']
   group node['artifactory']['user']
+  variables(:artifactory_creds => artifactory_creds)
   source 'storage/mysql.properties.erb'
-  notifies :restart, 'service[artifactory]'
 end

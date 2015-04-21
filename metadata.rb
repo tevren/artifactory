@@ -10,5 +10,6 @@ depends "runit"
 depends "ark"
 depends "apt"
 depends "java", "~> 1.16"
-depends "mysql", "= 5.2.12"
-depends "database", "= 4.0.2"
+depends "mysql", '~> 6.0'
+depends "database", "= 4.0.5"
+depends 'mysql2_chef_gem', '~> 1.0'
