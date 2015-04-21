@@ -28,7 +28,7 @@ default['artifactory']['catalina']['max_spare_threads']       = 150
 default['artifactory']['catalina']['enable_lookups']          = false
 default['artifactory']['catalina']['disable_upload_timeout']  = true
 default['artifactory']['catalina']['backlog']                 = 100
-
+default['artifactory']['init_service']                        = 'runit'
 default['artifactory']['database']['name']                    = 'artifactory'
 default['artifactory']['databag']                             = 'artifactory'
 default['artifactory']['databag_item']                        = 'credentials'

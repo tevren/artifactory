@@ -1,0 +1,18 @@
+description "Tomcat Server"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+respawn
+respawn limit 10 5
+
+setuid artifactory
+setgid artifactory
+
+<% @env.each_pair do |key, value| %>
+env <%= key.upcase %>="<%= value %>"
+<% end %>
+
+exec <%= node['artifactory']['dir'] %>/tomcat/bin/catalina.sh run
+
+
+

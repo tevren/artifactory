@@ -1,4 +1,4 @@
-include_recipe 'runit::default'
+
 include_recipe 'apt::default'
 include_recipe 'java::default'
 
@@ -29,15 +29,41 @@ execute "change-executable-permission" do
   notifies :restart, 'service[artifactory]', :delayed
 end
 
-runit_service 'artifactory' do
-  default_logger true
-  env({
-        "CATALINA_OPTS" => [
-                            node['artifactory']['java_opts'],
-                            "-Dfile.encoding=UTF8",
-                            "-Dartifactory.home=#{node['artifactory']['dir']}"
-                           ].join(" "),
-        "ARTIFACTORY_HOME" => node['artifactory']['dir']
-      })
-  subscribes :restart, "template [#{node['artifactory']['dir']}/etc/storage.properties]", :immediately
+case node['artifactory']['init_service']
+when 'runit'
+  include_recipe 'runit::default'
+  runit_service 'artifactory' do
+    default_logger true
+    env({
+          "CATALINA_OPTS" => [
+                              node['artifactory']['java_opts'],
+                              "-Dfile.encoding=UTF8",
+                              "-Dartifactory.home=#{node['artifactory']['dir']}"
+                             ].join(" "),
+          "ARTIFACTORY_HOME" => node['artifactory']['dir']
+        })
+    subscribes :restart, "template [#{node['artifactory']['dir']}/etc/storage.properties]", :delayed
+  end
+when 'upstart'
+  template '/etc/init/artifactory.conf' do
+    source 'artifactory.conf.erb'
+    variables(env:{
+          "CATALINA_OPTS" => [
+                              node['artifactory']['java_opts'],
+                              "-Dfile.encoding=UTF8",
+                              "-Dartifactory.home=#{node['artifactory']['dir']}"
+                             ].join(" "),
+          "ARTIFACTORY_HOME" => node['artifactory']['dir']
+        })
+    owner 'root'
+    group 'root'
+    mode '0644'
+  end
+  
+  service 'artifactory' do
+    provider Chef::Provider::Service::Upstart
+    supports :status => true, :restart => true
+    action [ :start, :enable ]
+    subscribes :restart, "template [#{node['artifactory']['dir']}/etc/storage.properties]", :delayed
+  end
 end
